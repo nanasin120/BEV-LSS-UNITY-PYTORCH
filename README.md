@@ -80,7 +80,8 @@ Directory.CreateDirectory(Path.Combine(currentSavePath, "voxels"));
 | | voxel_pooling(geometry, contextVector) | depth와 feature를 이용해 3차원안에 각 픽셀을 뿌린 voxel_features를 반환한다. |
 | Shoot | secondBackbone(voxel_features) | voxel_features의 관계성을 증가시킨 voxel를 반환한다. |
 | | taskHead(voxel) | voxel를 실제 복셀로 만든다. |
-각 형태의 자세한 설명은 아래의 폴더에 적어놓았습니다.
+
+각 형태의 자세한 설명은 아래의 폴더에 적어놓겠습니다.
 
 # 4. 학습
 ## 4.1 하이퍼 파라미터
@@ -113,3 +114,40 @@ DiceLoss의 비율을 9로 한 이유는 학습하며 IOU를 확인한 결과 �
 옵티마이저는 논문에 기반하여 AdamW를 사용하였으며 20에포크마다 학습률을 0.5만큼 떨어뜨리는 스케쥴러 또한 사용했습니다.
 
 # 5. 결과
+| 정답 | 예측 |
+| --- | --- |
+| <img width="791" height="589" alt="image" src="https://github.com/user-attachments/assets/28aa79e6-7017-4df8-be98-94371968fa97" /> | <img width="783" height="583" alt="image" src="https://github.com/user-attachments/assets/7723f2fb-99b8-4417-9329-e9a3875cbf35" /> |
+| <img width="789" height="596" alt="image" src="https://github.com/user-attachments/assets/785be2ce-1b14-439e-afd7-7e48ebeb9594" /> | <img width="775" height="576" alt="image" src="https://github.com/user-attachments/assets/f18ab5ce-d732-44fd-b126-98a283f2cbb6" /> |
+
+모델에는 크게 2개의 문제점이 있습니다.
+
+## 작은 장애물은 탐지를 못한다.
+위의 정답과 예측을 비교했을때 가로등이나 나무와 같이 얇은 장애물을 탐지하지 못함을 알 수 있습니다.
+
+이유는 실제 이미지에서부터 나타납니다.
+
+<img width="704" height="256" alt="image" src="https://github.com/user-attachments/assets/5b38ae3d-8044-4ac9-8b3b-bf10d9559b9f" />
+
+*이미지 중 1*
+
+이미지의 크기는 128 X 352입니다(여기선 2배로 올렸습니다) 이미지에서부터 가로등이나 나무와 같은 장애물은 얇게 나옵니다. 
+
+그런데 ImageBackbone(x)으로 들어가면 128 X 352가 8 X 22로 축소가 됩니다.
+
+이것이 얇은 장애물이 사라지는 이유입니다. 해결하기 위해서는 입력으로 들어오는 이미지의 크기를 높이는 방법이 있을것 같습니다.
+
+## 카메라가 보지 못하는 부분은 예측이 불가능하다.
+예를 들어 자동차의 위에 장애물이 있는 경우에는 카메라로 찍지를 못합니다.
+
+또 장애물 뒤에 있는 장애물은 카메라에 찍히지 않으니 예측이 불가능합니다.
+
+혹은 카메라 앞에 무언가가 있어 렌즈를 가린다면 예측이 불가능합니다.
+
+위와 같이 카메라가 보지 못하는 경우에는 예측이 자연스럽게 불가능해집니다.
+
+# 실시간 3D Voxel 생성
+
+<img src="https://github.com/user-attachments/assets/69b8cf36-af53-417f-b34b-99b72e241864" width="900" alt="실시간BEV">
+
+실시간이라고 하기에는 좌우반전이고 중간중간 끊깁니다. 하지만 유니티에서 ml_agents로 보내는것부터 이미 끊김이 있어 이는 어찌할수가 없었습니다.
+
