@@ -15,6 +15,8 @@ class VoxelVisualizer:
 
     def update(self, raw_data):
         data = np.transpose(raw_data, (1, 0, 2)) 
+        data = np.flip(data, axis=(2))
+
         occupied_indices = np.argwhere(data != 0)
         
         if len(occupied_indices) == 0:

@@ -13,7 +13,7 @@ spec = env.behavior_specs[behavior_name]
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 model = LSS(device).to(device)
-model.load_state_dict(torch.load(r'model_save\model_epoch_30.pth', weights_only=True))
+model.load_state_dict(torch.load(r'Python_Code\model_save\model_epoch_55.pth', weights_only=True))
 model.eval()
 
 pred_visualizer = VoxelVisualizer("pred")
