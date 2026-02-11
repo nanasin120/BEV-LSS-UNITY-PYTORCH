@@ -220,11 +220,9 @@ class LSS(nn.Module):
         full_W, full_H = 352, 128
 
         # 0 ~ ogfW-1까지 ogfW개의 1차원 행렬 생성
-        # ogfW 22이니 xs = [0, 1, 2, 3, ... , 20, 21]   
         xs = torch.linspace(0, full_W - 1, ogfW).float().to(self.device)
 
         # 0 ~ ogfH-1까지 ogfH개의 1차원 행렬 생성
-        # ogfH는 8이니 ys = [0, 1, 2, 3, 4, 5, 6, 7]
         ys = torch.linspace(0, full_H - 1, ogfH).float().to(self.device) 
 
         # self.D_min부터 self.D_max까지 self.D_step만큼 증가하는 1차원 행렬 생성
@@ -235,7 +233,6 @@ class LSS(nn.Module):
         # [45, 8, 22]인 3차원 행렬이 생성되는것
         # [깊이, 높이, 너비]인 상태로
         # d에는 깊이, y에는 높이, x에는 너비가 중심으로 들어가게됨
-        # d[34, 6, 2] = 35, y[34, 6, 2] = 6, x[34, 6, 2] = 2
         d, y, x = torch.meshgrid(ds, ys, xs, indexing='ij') 
 
         # 맨 뒤에 3개를 연속으로 쌓아 [45, 8, 22, 3]의 4차원 행렬 생성
@@ -326,7 +323,6 @@ class LSS(nn.Module):
         
         # 최종적으로 좌표값이 (0~63, 0~31, 0~63)인 데이터들의 모임이 됨
         # 사라지는건 같이 사라지니 괜찮음
-        # geom = torch.stack((nx, ny, nz), dim=1) # [_, 3]
         context = context[valid_mask] # [_, 64]
         batch_idx = batch_idx[valid_mask]
 
