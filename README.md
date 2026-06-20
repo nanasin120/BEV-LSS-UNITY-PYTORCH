@@ -151,3 +151,5 @@ DiceLoss의 비율을 9로 한 이유는 학습하며 IOU를 확인한 결과 �
 
 실시간이라고 하기에는 좌우반전이고 중간중간 끊깁니다. 하지만 유니티에서 ml_agents로 보내는것부터 이미 끊김이 있어 이는 어찌할수가 없었습니다.
 
+## License
+This repository is for portfolio and educational purposes only. All rights reserved by the author.
